@@ -41,12 +41,13 @@
     <div id="cravat"></div>
     <div id="snaps"></div>
     <script src="cravat-min.js"></script>
+    <script src="upload.js"></script>
     <script src="b64.js"></script>
     <script src="LZWEncoder.js"></script>
     <script src="NeuQuant.js"></script>
     <script src="GIFEncoder.js"></script>
     <script>
-      var encoder = new GIFEncoder(), cravat, inteval, count = 0, nb = 5;
+      var encoder = new GIFEncoder(), cravat, inteval, count = 0, nb = 6;
 
       function snap() {
         encoder.start();
@@ -81,12 +82,13 @@
                 encoder.finish();
                 count = 0;
                 var img = document.createElement('img');
-                img.src = 'data:image/gif;base64,' + encode64(encoder.stream().getData());
+                var data = encode64(encoder.stream().getData());
+                img.src = 'data:image/gif;base64,' + data;
                 document.querySelector('#snaps').appendChild(img);
-
-                if(document.querySelectorAll('#snaps img').length < 8) {
-                  setTimeout(snap, 500);
-                }
+                console.log(data);
+                /*ScreenLetStoreUploader(data, function() {
+                  debugger;
+                });*/
               }
             }
           });
