@@ -2,100 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>GIF me!</title>
-    <style>
-      body {
-        font-size: 4em;
-        background: black;
-        text-align: center;
-      }
-      button {
-        font-family: arial;
-        font-size: 1em;
-        color: #eee;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        text-decoration: underline;
-        font-weight: bold;
-      }
-      #cravat {
-        display: none;
-      }
-      #snaps {
-        position: absolute;
-        top: 1em;
-        bottom: 1em;
-        left: 1em;
-        right: 1em;
-      }
-      #snaps img {
-        margin: .5em;
-        display: block;
-        float: left;
-      }
-    </style>
+    <title>gifme.tv</title>
+    <link rel="stylesheet" href="gifme.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <button onclick="go()">let's go!</button>
-    <div id="cravat"></div>
-    <div id="snaps"></div>
+    <header>
+      <h1>gifme.tv</h1>
+      <h2>press the button to record</h2>
+    </header>
+    <div class="tv">
+      <button class="record" onclick="record()" title="record now!"></button>
+      <div id="cravat"></div>
+      <img id="gif" src="static.gif" />
+      <div id="frame"></div>
+    </div>
     <script src="cravat-min.js"></script>
     <script src="upload.js"></script>
     <script src="b64.js"></script>
     <script src="LZWEncoder.js"></script>
     <script src="NeuQuant.js"></script>
     <script src="GIFEncoder.js"></script>
-    <script>
-      var encoder = new GIFEncoder(), cravat, inteval, count = 0, nb = 6;
-
-      function snap() {
-        encoder.start();
-        interval = setInterval(function() {
-          cravat.snapNow();
-        }, Math.floor(Math.random()*200) + 300);
-      };
-
-      function go() {
-        encoder.setRepeat(0);
-        encoder.setDelay(200);
-        encoder.setSize(200, 200);
-
-        document.querySelector('button').style.display = 'none';
-        
-        if(!cravat) {
-          cravat = new Cravat({
-            width: 200,
-            height: 200,
-            root: document.getElementById('cravat'),
-            showControls: false,
-          
-            onReady: function() {
-              snap();
-            },
-          
-            onSnap: function(dataURL) {
-              count ++;
-              encoder.addFrame(cravat._videoCtx);
-              if(count >= nb) {
-                clearInterval(interval);
-                encoder.finish();
-                count = 0;
-                var img = document.createElement('img');
-                var data = encode64(encoder.stream().getData());
-                img.src = 'data:image/gif;base64,' + data;
-                document.querySelector('#snaps').appendChild(img);
-                console.log(data);
-                /*ScreenLetStoreUploader(data, function() {
-                  debugger;
-                });*/
-              }
-            }
-          });
-        } else {
-          snap();
-        }
-      };
-    </script>
+    <script src="gifme.js"></script>
   </body>
 </html>
