@@ -1,36 +1,48 @@
 @import url(http://fonts.googleapis.com/css?family=League+Script);
 
 body {
-  font-size: 4em;
-
+  font-size: 3em;
   background: orange;
 }
 
-header {
+.strip, .strip li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.strip {
   position: absolute;
+
   top: 50%;
-  margin-top: -25px;
-  left: 65%;
-  margin-left: -580px;
+  left: 420px;
+  margin-top: -90px;
+  height: 180px;
+  white-space: nowrap;
 
-  padding: 0 20px;
-
-  font-family: 'League Script', cursive;
-  color: white;
+  background: url("strip.gif") repeat-x scroll right top / auto 100%  transparent;
 }
-h1 {
-  padding: 0;
-  margin: 0;
-  font-size: 1.5em;
-}
-h2 {
-  padding: 0;
-  margin: 0;
-  font-size: .4em;
+.strip li {
+  display: inline-block;
 
+  margin-top: 26px;
+  border-right: 20px solid #5D2313;
+
+  width: 0;
+  height: 127px;
+  overflow: hidden;
   position: relative;
-  top: -25px;
-  left: 85px;
+
+  transition: width .5s ease-out;
+}
+.strip li.expanded {
+  width: 150px;
+}
+.strip li img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 150px;
+  height: 127px;
 }
 
 
@@ -39,8 +51,7 @@ h2 {
 
   top: 50%;
   margin-top: -123px;
-  left: 65%;
-  margin-left: -150px;
+  left: 150px;
   width: 300px;
   height: 247px;
 }

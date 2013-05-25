@@ -1,73 +1,69 @@
-var encoder = new GIFEncoder(),
-  cravat, interval, count = 0,
-  nb = 6,
-  width = 225,
-  height = 165,
-  img = document.querySelector('#gif'),
-  downloadLink;
+var GifMe = (function() {
 
-function getOneFrame() {
-  encoder.start();
-  interval = setInterval(function() {
-    cravat.snapNow();
-  }, Math.floor(Math.random() * 200) + 300);
-};
+  var encoder = new GIFEncoder(),
+    interval, count = 0,
+    nb = 8,
+    width = 225,
+    height = 165,
+    img = document.querySelector('#gif'),
+    strip = document.querySelector('.strip'),
+    downloadLink,
+    isCravatReady = false,
+    frameCount = 0;
 
-function clickLink(link) {
-  if (document.createEvent) {
-    var event = document.createEvent("MouseEvents");
-    event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-    link.dispatchEvent(event);
-  } else if (link.fireEvent) {
-    link.fireEvent("onclick");
-  }
-}
+  var cravat = new Cravat({
+    width: width,
+    height: height,
+    root: document.getElementById('cravat'),
+    showControls: false,
 
-function downloadFile(url) {
-  if (!downloadLink) {
-    downloadLink = document.createElement('a');
-    downloadLink.style.visibility = 'hidden';
-    downloadLink.setAttribute('download', 'gifmetv.gif');
-    document.body.appendChild(downloadLink);
-  }
-  downloadLink.href = url.replace('image/gif', 'application/octet-stream');
-  clickLink(downloadLink);
-};
+    onReady: function() {
+      isCravatReady = true;
+    },
 
-function record() {
-  var frameCount = 0;
-
-  encoder.setRepeat(0);
-  encoder.setDelay(200);
-  encoder.setSize(width, height);
-
-  if (!cravat) {
-    cravat = new Cravat({
-      width: width,
-      height: height,
-      root: document.getElementById('cravat'),
-      showControls: false,
-
-      onReady: function() {
-        getOneFrame();
-      },
-
-      onSnap: function(dataURL) {
+    onSnap: function(dataURL) {
+      frameCount++;
+      encoder.addFrame(cravat._videoCtx);
+      if (frameCount >= nb) {
+        clearInterval(interval);
+        encoder.finish();
+        frameCount = 0;
+        var gifData = encoder.stream().getData();
+        addImageToSTrip('data:image/gif;base64,' + encode64(gifData));
+        frameCount = 0;
         img.src = 'static.gif';
-        frameCount++;
-        encoder.addFrame(cravat._videoCtx);
-        if (frameCount >= nb) {
-          clearInterval(interval);
-          encoder.finish();
-          frameCount = 0;
-          var gifData = encoder.stream().getData()
-          img.src = 'data:image/gif;base64,' + encode64(gifData);
-          downloadFile(img.src);
-        }
       }
-    });
-    cravat.setFilter('bw');
-  } else {
-    getOneFrame();
+    }
+  });
+  cravat.setFilter('bw');
+
+  function addImageToSTrip(data) {
+    var img = document.createElement('img');
+    img.src = data;
+    var li = document.createElement('li');
+    li.appendChild(img);
+    if(strip.firstElementChild) {
+      strip.insertBefore(li, strip.firstElementChild);
+    } else {
+      strip.appendChild(li);
+    }
+    setTimeout(function() {li.classList.add('expanded');}, 200);
   }
-};
+
+  function record() {
+    img.src = 'countdown.gif';
+    encoder.setRepeat(0);
+    encoder.setDelay(200);
+    encoder.setSize(width, height);
+
+    encoder.start();
+    interval = setInterval(function() {
+      cravat.snapNow();
+    }, Math.floor(Math.random() * 100) + 400);
+  };
+
+  return {
+    record : record
+  };
+
+})();

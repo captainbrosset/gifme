@@ -7,18 +7,14 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <header>
-      <h1>gifme.tv</h1>
-      <h2>press the button to record</h2>
-    </header>
+    <ul class="strip"></ul>
     <div class="tv">
-      <button class="record" onclick="record()" title="record now!"></button>
+      <button class="record" onclick="GifMe.record()" title="record now!"></button>
       <div id="cravat"></div>
       <img id="gif" src="static.gif" />
       <div id="frame"></div>
     </div>
     <script src="cravat-min.js"></script>
-    <script src="upload.js"></script>
     <script src="b64.js"></script>
     <script src="LZWEncoder.js"></script>
     <script src="NeuQuant.js"></script>
