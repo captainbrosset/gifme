@@ -9,12 +9,12 @@
   <body>
     <ul class="strip"></ul>
     <div class="tv">
-      <button class="record" onclick="GifMe.record()" title="record now!"></button>
-      <div id="cravat"></div>
+      <button class="record" onclick="GifMe.record()" title="record now!" aria-label="Record a GIF" disabled></button>
+      <div id="cravat"><video id="camera" autoplay muted playsinline></video></div>
       <img id="gif" src="static.gif" />
       <div id="frame"></div>
     </div>
-    <script src="cravat-min.js"></script>
+    <p id="status" role="alert" hidden></p>
     <script src="b64.js"></script>
     <script src="LZWEncoder.js"></script>
     <script src="NeuQuant.js"></script>
